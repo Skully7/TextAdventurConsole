@@ -26,36 +26,44 @@ namespace TextAdventureProject.TextAdventureFramework
             Console.WriteLine("### Player Generator started! ###");
             Console.WriteLine("First, enter a name for your character.");
 
-            string tempName = Program.ReadStringInput("name");
-            AdventurePlayer player = new AdventurePlayer(tempName);
-
-            Console.WriteLine("Next, lets shape your character. Your character has three stats: STRENGTH, DEXTERITY and INTELLIGENCE.");
-            Console.WriteLine("Your characters current stats are: ");
-            Program.WriteLineColored($"STRENGTH: {player.Str}", Program.HighlightColor);
-            Program.WriteLineColored($"DEXTERITY: {player.Dex}", Program.HighlightColor);
-            Program.WriteLineColored($"INTELLIGENCE: {player.Int}", Program.HighlightColor);
-            Console.WriteLine($"You possess {statPoints} skill-points to add to the stats step by step.");
-            Console.WriteLine($"How many points do you want to spent on STRENGTH?");
-            int strPlus = Program.ReadNumericInput(statPoints, 0);
-            statPoints -= strPlus;
-            player.Str += strPlus;
-            if (statPoints > 0)
+            string tempName;
+            AdventurePlayer player;
+            do
             {
-                Console.WriteLine($"You have {statPoints} skill-points left.");
-                Console.WriteLine($"How many points do you want to spent on DEXTERITY? Remaining points will be added to INTELLIGENCE.");
+                tempName = Program.ReadStringInput("name");
+                player = new AdventurePlayer(tempName);
 
-                int dexPlus = Program.ReadNumericInput(statPoints, 0);
-                statPoints -= dexPlus;
-                player.Dex += dexPlus;
-                player.Int += statPoints;
-            }
-            Console.WriteLine("You spent all your points! Your characters final stats are: ");
-            Program.WriteLineColored($"STRENGTH: {player.Str}", Program.HighlightColor);
-            Program.WriteLineColored($"DEXTERITY: {player.Dex}", Program.HighlightColor);
-            Program.WriteLineColored($"INTELLIGENCE: {player.Int}", Program.HighlightColor);
+                Console.WriteLine("Next, lets shape your character. Your character has three stats: STRENGTH, DEXTERITY and INTELLIGENCE.");
+                Console.WriteLine("Your characters current stats are: ");
+                Program.WriteLineColored($"STRENGTH: {player.Str}", Program.HighlightColor);
+                Program.WriteLineColored($"DEXTERITY: {player.Dex}", Program.HighlightColor);
+                Program.WriteLineColored($"INTELLIGENCE: {player.Int}", Program.HighlightColor);
+                Console.WriteLine($"You possess {statPoints} skill-points to add to the stats step by step.");
+                Console.WriteLine($"How many points do you want to spent on STRENGTH?");
+                int strPlus = Program.ReadNumericInput(statPoints, 0);
+                statPoints -= strPlus;
+                player.Str += strPlus;
+                if (statPoints > 0)
+                {
+                    Console.WriteLine($"You have {statPoints} skill-points left.");
+                    Console.WriteLine($"How many points do you want to spent on DEXTERITY? Remaining points will be added to INTELLIGENCE.");
 
-            //TODO Confirmation
+                    int dexPlus = Program.ReadNumericInput(statPoints, 0);
+                    statPoints -= dexPlus;
+                    player.Dex += dexPlus;
+                    player.Int += statPoints;
+                }
+                Console.WriteLine("You spent all your points! Your characters final stats are: ");
+                Program.WriteLineColored($"STRENGTH: {player.Str}", Program.HighlightColor);
+                Program.WriteLineColored($"DEXTERITY: {player.Dex}", Program.HighlightColor);
+                Program.WriteLineColored($"INTELLIGENCE: {player.Int}", Program.HighlightColor);
 
+                Console.WriteLine($"Are you fine with {player.Name}?");
+                if(Program.ProcessPlayerChoice(new[] { "Yes", "No. Redo." }) != 0)
+                    continue;
+
+                break;
+            } while (true);
             return player;
         }
 

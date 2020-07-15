@@ -1,6 +1,7 @@
 ﻿using System;
-using System.Drawing;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using TextAdventureProject.TextAdventureFramework;
 
 namespace TextAdventureProject
@@ -15,9 +16,17 @@ namespace TextAdventureProject
 
         static void Main(string[] args)
         {
-            AdventurePlayer p = AdventurePlayer.Generate();
+            //AdventurePlayer p = AdventurePlayer.Generate();
 
-            Console.WriteLine("Player Str: " + p.Str);
+            BaseStoryOption[] testOptions = 
+            {
+                new SimpleStoryOption("Target01", "Display01"),
+                new SimpleStoryOption("Target02", "Display02"),
+                new SimpleStoryOption("Target03", "Display03"),
+            };
+            int input = ProcessPlayerChoice(testOptions);
+
+            Console.WriteLine("Target was: " + testOptions[input].TargetKey);
         }
 
 
@@ -129,6 +138,20 @@ namespace TextAdventureProject
             } while (true);
 
             return nameInput;
+        }
+
+        public static int ProcessPlayerChoice(string[] options)
+        {
+            for (int i = 0; i < options.Length; i++)
+            {
+                Console.WriteLine($"{i+1}: {options[i]}");
+            }
+            return ReadNumericInput(options.Length) - 1;
+        }
+
+        public static int ProcessPlayerChoice(BaseStoryOption[] options)
+        {
+            return ProcessPlayerChoice(options.Select(t => t.DisplayText).ToArray());
         }
 
         public struct ColorSwitcher : IDisposable
